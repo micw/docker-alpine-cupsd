@@ -1,0 +1,32 @@
+# $Id$
+# Maintainer: Michael Wyraz <michael@wyraz.de>
+# Adapated from https://aur.archlinux.org/packages/epson-inkjet-printer-escpr/
+#
+
+pkgname=cups-epson-escpr
+pkgver=1.6.18
+pkgrel=1
+pkgdesc="Epson Inkjet Printer Driver (ESC/P-R) for Linux"
+arch="i686 x86_64 armv6h armv7h"
+url="http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX"
+license="GPL2"
+depends="cups ghostscript"
+makedepends="cups-dev"
+options="!libtool"
+source="https://download3.ebz.epson.net/dsc/f/03/00/06/86/80/9955e43f3aead20366851d24cea65de779cf5aa7/epson-inkjet-printer-escpr-1.6.18-1lsb3.2.tar.gz bug_x86_64.patch"
+builddir="$srcdir"/epson-inkjet-printer-escpr-$pkgver
+sha512sums="8d55772c3b4827d9b8a09d2e7755589be6e0745f3fcad5774cbf769805bf237d431e01d730b7b80ee6c9ffc0c7565e8cfb0d74b59f36940450cc89c9518c190d  epson-inkjet-printer-escpr-1.6.18-1lsb3.2.tar.gz
+e278cf3db482aed862c2343a2ee5147fa0e53b14d80b9fdf6907e35eae0235a440b2dfe480cbae28dc4e00c0e7cf119e6b870480a69759a6df4e0c676aec5229  bug_x86_64.patch"
+
+build() {
+  ./configure --prefix=/usr \
+              --with-cupsfilterdir=/usr/lib/cups/filter \
+              --with-cupsppddir=/usr/share/ppd
+  make
+}
+
+package() {
+  cd "$builddir"
+  make DESTDIR="$pkgdir" install
+}
+
