@@ -27,6 +27,7 @@ RUN apk add --update --no-cache cups cups-filters && \
 
 ADD https://raw.githubusercontent.com/jpetazzo/pipework/master/pipework /pipework
 ADD run.sh /run.sh
+RUN chmod 0755 /run.sh
 
 ENV CUPS_ADMIN_USERNAME=admin
 ENV CUPS_ADMIN_PASSWORD=admin
