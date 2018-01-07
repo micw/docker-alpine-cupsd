@@ -15,8 +15,9 @@ FROM alpine:3.7
 
 COPY --from=build--cups-epson-escpr /home/build/packages/build/x86_64/cups-epson-escpr-1.6.18-r1.apk /cups-epson-escpr-1.6.18-r1.apk
 
-RUN apk add --update --no-cache cups cups-filters bash && \
+RUN apk add --update --no-cache cups cups-filters avahi bash && \
 	apk add --allow-untrusted /cups-epson-escpr-1.6.18-r1.apk && \
+	sed -i 's/#enable-dbus=yes/enable-dbus=no/g' /etc/avahi/avahi-daemon.conf && \
 	sed -i 's/Listen localhost:631/Listen 0.0.0.0:631/' /etc/cups/cupsd.conf && \
 	sed -i 's/LogLevel warn/LogLevel info/' /etc/cups/cupsd.conf && \
 	sed -i 's/<Location \/>/<Location \/>\n  Allow All/' /etc/cups/cupsd.conf && \
@@ -32,7 +33,9 @@ RUN chmod 0755 /run.sh
 ENV CUPS_ADMIN_USERNAME=admin
 ENV CUPS_ADMIN_PASSWORD=admin
 
-VOLUME /etc/cups/ /var/log/cups /var/spool/cups /var/spool/cups-pdf /var/cache/cups
+VOLUME /etc/cups/ /etc/avahi/services /var/log/cups /var/spool/cups /var/spool/cups-pdf /var/cache/cups
+
 EXPOSE 631
+EXPOSE 5353/udp
 
 CMD /run.sh
