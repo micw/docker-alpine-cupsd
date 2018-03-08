@@ -12,6 +12,7 @@ id ${CUPS_ADMIN_USERNAME} || adduser -H -S -G lpadmin ${CUPS_ADMIN_USERNAME}
 echo "${CUPS_ADMIN_USERNAME}:${CUPS_ADMIN_PASSWORD}" | chpasswd
 
 echo "Starting dbus"
+rm -rf /var/run/dbus.pid
 /usr/bin/dbus-daemon --system
 sleep 2
 
